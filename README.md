@@ -9,7 +9,7 @@ Fashion data(attributes, styling) crawler using Scrapy framework.
 
 ## Set up
 ```sh
-pip install scrapy, selenium
+pip install scrapy selenium
 ```
 ```sh
 cd fashion-crawler
