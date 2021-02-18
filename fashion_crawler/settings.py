@@ -20,7 +20,7 @@ NEWSPIDER_MODULE = 'fashion_crawler.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 8
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -49,11 +49,6 @@ ROBOTSTXT_OBEY = False
 #    'scrapy.extensions.telnet.TelnetConsole': None,
 #}
 
-# Configure item pipelines
-# See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   'fashion_crawler.pipelines.FashionPipeline': 300,
-}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -92,9 +87,17 @@ ITEM_PIPELINES = {
 #     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 810,
 # }
 
+# Configure item pipelines
+# See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+ITEM_PIPELINES = {
+   'fashion_crawler.pipelines.FashionDatabasePipeline': 300, 
+   # 'fashion_crawler.pipelines.FashionCSVPipeline': 400, 
+}
+
 
 # Selenium settings
-CHROME_DRIVER_PATH = './chromedriver'
+CHROME_DRIVER_PATH = '../chromedriver'
+WEBDRIVER_WAIT_TIME = 1.6
 SPIDER_MIDDLEWARES = {
    'fashion_crawler.middlewares.FashionSeleniumSpiderMiddleware': 543,
 }
@@ -104,8 +107,24 @@ DOWNLOADER_MIDDLEWARES = {
 }
 
 # Custom settings
-DEFAULT_PAGE_COUNT = 1 
+DEFAULT_START_PAGE = 81 
+DEFAULT_END_PAGE = 200
+DOWNLOAD_DELAY = 0.3 # wait before download a page
+
+# Logger settings
 LOG_LEVEL = 'INFO'  # to only display errors
-LOG_FORMAT = '[%(asctime)-15s] %(levelname)s: %(message)s'
-DOWNLOAD_DELAY = 2 # wait before download a page
-# LOG_FILE = 'log.txt'
+LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
+LOG_STDOUT = True
+LOG_ENABLED = True
+
+from datetime import datetime
+LOG_FILE = datetime.now().strftime('../logs/%Y_%m_%d_%H_%M.log')
+
+# Database settings
+# DB_SETTINGS = dict(
+#    db=,
+#    user=,
+#    passwd=,
+#    host=,
+#    port=,
+# )

@@ -43,14 +43,16 @@ class FashionSeleniumSpiderMiddleware:
 
 class FashionSeleniumDownloaderMiddleware:
     
-    def __init__(self, chrome_path):
+    def __init__(self, chrome_path, wait_time):
         self.chrome_path = chrome_path
+        self.wait_time = wait_time
     
     @classmethod
     def from_crawler(cls, crawler):
         chrome_path = crawler.settings.get('CHROME_DRIVER_PATH')
+        wait_time = crawler.settings.get('WEBDRIVER_WAIT_TIME')
         
-        ext = cls(chrome_path)
+        ext = cls(chrome_path, wait_time)
         crawler.signals.connect(ext.spider_opened, signal=signals.spider_opened)
         crawler.signals.connect(ext.spider_closed, signal=signals.spider_closed)
         return ext
@@ -60,12 +62,13 @@ class FashionSeleniumDownloaderMiddleware:
         
         chrome_options = Options()
         chrome_options.add_argument("--headless") # run without an actual browser window.
-
+        chrome_options.add_argument("--no-sandbox")
         driver = webdriver.Chrome(executable_path=self.chrome_path, chrome_options=chrome_options)
+        driver.implicitly_wait(self.wait_time)
         self.driver = driver
         
     def spider_closed(self, spider):
-        self.driver.close()
+        self.driver.quit()
 
     def process_request(self, request, spider):
         self.driver.get(request.url)
@@ -78,5 +81,3 @@ class FashionSeleniumDownloaderMiddleware:
 
     def process_exception(self, request, exception, spider):
         pass
-
- 
