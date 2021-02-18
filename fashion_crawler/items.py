@@ -5,8 +5,10 @@
 
 import scrapy
 
-
 class Fashion(scrapy.Item):
+    id = scrapy.Field()
+    site = scrapy.Field()
+    type = scrapy.Field()
     item_ids = scrapy.Field()
 
 class FashionItem(scrapy.Item):
@@ -14,8 +16,10 @@ class FashionItem(scrapy.Item):
     brand = scrapy.Field()
     name = scrapy.Field()
     img_url = scrapy.Field()
+    detail_url = scrapy.Field()
+    sex = scrapy.Field()
     category = scrapy.Field()
-    category_detail = scrapy.Field()
+    kind = scrapy.Field()
     color = scrapy.Field()
     tpo = scrapy.Field()
     pattern = scrapy.Field()
@@ -23,3 +27,5 @@ class FashionItem(scrapy.Item):
     materials = scrapy.Field()
     fit = scrapy.Field()
     length = scrapy.Field()
+    price = scrapy.Field(serializer=int)
+    wish = scrapy.Field(serializer=int)
